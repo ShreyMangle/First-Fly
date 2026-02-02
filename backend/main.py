@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from backend.app.core.database import Base, engine
 from backend.app.api.college import router as college_router
 from backend.app.api.cutoff import router as cutoff_router
+from backend.app.api.eligibility import router as eligibility_router
 
 app=FastAPI(
     title="First Fly",
@@ -19,3 +20,5 @@ Base.metadata.create_all(bind=engine)
 app.include_router(college_router)
 
 app.include_router(cutoff_router)
+
+app.include_router(eligibility_router)
