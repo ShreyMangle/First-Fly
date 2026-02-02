@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from backend.app.core.database import Base, engine
 from backend.app.api.college import router as college_router
+from backend.app.api.cutoff import router as cutoff_router
 
 app=FastAPI(
     title="First Fly",
@@ -16,3 +17,5 @@ def health_check():
 
 Base.metadata.create_all(bind=engine)
 app.include_router(college_router)
+
+app.include_router(cutoff_router)
