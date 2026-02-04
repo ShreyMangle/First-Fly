@@ -16,9 +16,15 @@ def insert_cutoffs(cutoff_rows: list[dict]):
         )
 
         if not college:
-            print(f"College not found: {row['college_name']}")
-            continue
-
+            college = College(
+                name=row["college_name"],
+                city=row["college_name"].split(",")[-1].strip(),
+                college_type="Unknown"
+            )
+            db.add(college)
+            db.commit()
+            db.refresh(college)
+    
         existing = (
             db.query(Cutoff)
             .filter(

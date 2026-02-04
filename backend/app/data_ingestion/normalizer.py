@@ -31,6 +31,11 @@ def normalize_category(cat: str) -> str | None:
         "GSEBCS": "EBC",
         "TFWS": "TFWS",
         "EWS": "EWS",
+        
+        "GVJS": "VJ",
+        "GNT1S": "NT1",
+        "GNT2S": "NT2",
+        "GNT3S": "NT3",
     }
 
     return category_map.get(cat)
