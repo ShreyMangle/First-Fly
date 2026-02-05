@@ -13,12 +13,17 @@ def recommend(
     category: str,
     branch: str,
     year: int,
+    top_n: int = 10,
+    min_status: str | None = None,
     db: Session = Depends(get_db),
 ):
-    return get_recommendations(
+    results = get_recommendations(
         db=db,
         percentile=percentile,
         category=category,
         branch=branch,
         year=year,
+        min_status=min_status,
     )
+    
+    return results[:top_n]
