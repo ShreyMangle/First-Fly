@@ -11,10 +11,15 @@ router = APIRouter(prefix="/cutoffs", tags=["Cutoffs"])
 def list_cutoffs(
     year: int,
     category: str,
+    branch_code: str,
     db: Session = Depends(get_db),
 ):
     return (
         db.query(Cutoff)
-        .filter(Cutoff.year == year, Cutoff.category == category)
+        .filter(
+            Cutoff.year == year,
+            Cutoff.category == category,
+            Cutoff.branch_code == branch_code,
+        )
         .all()
     )

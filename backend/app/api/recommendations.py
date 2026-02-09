@@ -11,7 +11,7 @@ router = APIRouter(prefix="/recommendations", tags=["Recommendations"])
 def recommend(
     percentile: float,
     category: str,
-    branch: str,
+    branch_code: str,
     year: int,
     top_n: int = 10,
     min_status: str | None = None,
@@ -21,7 +21,7 @@ def recommend(
         db=db,
         percentile=percentile,
         category=category,
-        branch=branch,
+        branch_code=branch_code,
         year=year,
         min_status=min_status,
     )

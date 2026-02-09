@@ -17,6 +17,7 @@ def insert_cutoffs(cutoff_rows: list[dict]):
 
         if not college:
             college = College(
+                code=row["college_code"],
                 name=row["college_name"],
                 city=row["college_name"].split(",")[-1].strip(),
                 college_type="Unknown"
@@ -29,7 +30,7 @@ def insert_cutoffs(cutoff_rows: list[dict]):
             db.query(Cutoff)
             .filter(
                 Cutoff.college_id == college.id,
-                Cutoff.branch == row["branch"],
+                Cutoff.branch_code == row["branch_code"],
                 Cutoff.category == row["category"],
                 Cutoff.year == row["year"],
                 Cutoff.round == row["round"],
@@ -42,7 +43,7 @@ def insert_cutoffs(cutoff_rows: list[dict]):
 
         cutoff = Cutoff(
             college_id=college.id,
-            branch=row["branch"],
+            branch_code=row["branch_name"],
             category=row["category"],
             year=row["year"],
             round=row["round"],

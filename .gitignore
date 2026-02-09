@@ -10,3 +10,12 @@ __pycache__/
 
 # OS files
 .DS_Store
+
+# raw data
+data/raw/
+
+#ignore test files
+backend/app/data_ingestion/test_*.py
+
+# database
+*.db

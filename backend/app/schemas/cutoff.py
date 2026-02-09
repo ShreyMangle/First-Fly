@@ -3,7 +3,8 @@ from pydantic import BaseModel
 class CutoffOut(BaseModel):
     id: int
     college_id: int
-    branch: str
+    branch_code: str
+    branch_name: str
     category: str
     year: int
     round: int

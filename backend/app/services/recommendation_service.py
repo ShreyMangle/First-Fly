@@ -1,54 +1,49 @@
 from sqlalchemy.orm import Session
 from backend.app.models.cutoff import Cutoff
-from backend.app.models.college import College
 
-STATUS_RANK = {
-    "SAFE": 3,
-    "MODERATE": 2,
-    "DREAM": 1,
-}
 
 def get_recommendations(
     db: Session,
     percentile: float,
     category: str,
-    branch: str,
+    branch_code: str,
     year: int,
     min_status: str | None = None,
 ):
-    rows = (
-        db.query(Cutoff, College)
-        .join(College, Cutoff.college_id == College.id)
+    results = []
+
+    cutoffs = (
+        db.query(Cutoff)
         .filter(
-            Cutoff.branch == branch,
             Cutoff.category == category,
-            Cutoff.year == year
+            Cutoff.branch_code == branch_code,
+            Cutoff.year == year,
         )
         .all()
     )
 
-    results = []
+    for c in cutoffs:
+        cutoff = c.percentile_cutoff
 
-    for cutoff, college in rows:
-        diff = percentile - cutoff.percentile_cutoff
-
-        if diff >= 5:
+        if percentile >= cutoff + 1:
             status = "SAFE"
-        elif -5 <= diff < 5:
+        elif cutoff - 0.5 <= percentile < cutoff + 1:
             status = "MODERATE"
         else:
             status = "DREAM"
 
-        if min_status:
-            if STATUS_RANK[status] < STATUS_RANK[min_status]:
-                continue
-            
+        if min_status and status not in ("SAFE", "MODERATE", "DREAM"):
+            continue
+
         results.append({
-            "college": college.name,
-            "branch": branch,
-            "cutoff": cutoff.percentile_cutoff,
-            "difference": round(diff, 2),
+            "college_id": c.college_id,
+            "branch_code": c.branch_code,
+            "branch_name": c.branch_name,
+            "category": c.category,
+            "year": c.year,
+            "round": c.round,
+            "cutoff": cutoff,
             "status": status,
         })
 
-    return sorted(results, key=lambda x: x["cutoff"])
+    return results
