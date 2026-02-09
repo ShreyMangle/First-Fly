@@ -43,11 +43,12 @@ def insert_cutoffs(cutoff_rows: list[dict]):
 
         cutoff = Cutoff(
             college_id=college.id,
-            branch_code=row["branch_name"],
+            branch_code=row["branch_code"],
+            branch_name=row["branch_name"],
             category=row["category"],
             year=row["year"],
             round=row["round"],
-            percentile_cutoff=row["cutoff_percentile"],
+            percentile_cutoff=row["percentile"],
         )
 
         db.add(cutoff)
