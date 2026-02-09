@@ -3,6 +3,7 @@ from backend.app.core.database import Base, engine
 from backend.app.api.college import router as college_router
 from backend.app.api.cutoff import router as cutoff_router
 from backend.app.api.recommendations import router as recommendations_router
+from backend.app.api.branches import router as branches_router
 
 from fastapi.middleware.cors import CORSMiddleware 
 
@@ -36,3 +37,4 @@ app.include_router(cutoff_router)
 
 app.include_router(recommendations_router)
 
+app.include_router(branches_router)

@@ -1,18 +1,26 @@
-import { useState } from "react";
 import { fetchRecommendations } from "../api";
+import { useState, useEffect } from "react";
 
 function RecommendationForm({ onResults }) {
   const [form, setForm] = useState({
     percentile: "",
     category: "OPEN",
-    branch: "Computer Science and Engineering",
-    year: 2024,
+    branch_code: "",
+    year: 2022,
     min_status: "SAFE",
     top_n: 10,
   });
 
+  const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/branches")
+      .then((res) => res.json())
+      .then((data) => setBranches(data))
+      .catch(() => setError("Failed to load branches"));
+  }, []);
 
   const handleChange = (e) => {
     setForm({
@@ -52,7 +60,11 @@ function RecommendationForm({ onResults }) {
 
       <div>
         <label>Category:</label><br />
-        <select name="category" value={form.category} onChange={handleChange}>
+        <select
+          name="category"
+          value={form.category}
+          onChange={handleChange}
+        >
           <option value="OPEN">OPEN</option>
           <option value="SC">SC</option>
           <option value="ST">ST</option>
@@ -64,14 +76,18 @@ function RecommendationForm({ onResults }) {
 
       <div>
         <label>Branch:</label><br />
-        <select name="branch" value={form.branch} onChange={handleChange}>
-          <option>Computer Science and Engineering</option>
-          <option>Information Technology</option>
-          <option>Computer Engineering</option>
-          <option>Electronics and Telecommunication Engg</option>
-          <option>Electrical Engineering</option>
-          <option>Mechanical Engineering</option>
-          <option>Civil Engineering</option>
+        <select 
+          name="branch_code" 
+          value={form.branch_code} 
+          onChange={handleChange} 
+          required
+        >
+          <option value="">Select Branch</option>
+          {branches.map(b => (
+            <option key={b.branch_code} value={b.branch_code}>
+              {b.branch_name}
+            </option>
+          ))}        
         </select>
       </div>
 
