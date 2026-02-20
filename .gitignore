@@ -19,3 +19,9 @@ backend/app/data_ingestion/test_*.py
 
 # database
 *.db
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# ML training datasets (generated)
+backend/ML/*.csv
