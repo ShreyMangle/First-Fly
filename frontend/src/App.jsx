@@ -1,25 +1,34 @@
-import { useState } from "react";
-import RecommendationForm from "./components/RecommendationForm";
-import CollegeCard from "./components/CollegeCard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Pricing from "./pages/Pricing";
+import Contact from "./pages/Contact";
+import AppPage from "./pages/AppPage";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 function App() {
-  const [results, setResults] = useState([]);
-
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>First Fly</h1>
-      <p>CET College Recommendation Platform</p>
+    <Router>
+      <Navbar />
 
-      <RecommendationForm onResults={setResults} />
-
-      <div style={{ marginTop: "2rem" }}>
-        {results.length === 0 && <p>No results yet.</p>}
-
-        {results.map((college, index) => (
-          <CollegeCard key={index} college={college} />
-        ))}
+      <div style={{ minHeight: "80vh", padding: "2rem" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/app" element={<AppPage />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="*" element={<h2>Page Not Found</h2>} />
+        </Routes>
       </div>
-    </div>
+
+      <Footer />
+    </Router>
   );
 }
 
