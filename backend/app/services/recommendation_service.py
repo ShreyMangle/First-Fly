@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from backend.app.models.cutoff import Cutoff
 from backend.app.models.college import College
+from backend.ml.predictor import predict_probability
 
 STATUS_RANK = {
     "SAFE": 3,
@@ -30,11 +31,16 @@ def get_recommendations(
     )
 
     for cutoff, college in rows:
-        diff = round(percentile - cutoff.percentile_cutoff, 2)
-
-        if diff >= 1:
+        probability = predict_probability(
+            student_percentile=percentile,
+            cutoff_percentile=cutoff.percentile_cutoff,
+            ml_category=category,
+            round_value=cutoff.round,
+        )
+        
+        if probability >= 0.75:
             status = "SAFE"
-        elif diff >= -0.5:
+        elif probability >= 0.48:
             status = "MODERATE"
         else:
             status = "DREAM"
@@ -49,10 +55,10 @@ def get_recommendations(
             "year": cutoff.year,
             "round": cutoff.round,
             "cutoff": cutoff.percentile_cutoff,
-            "difference": diff,
+            "probability": round(probability, 3),
             "status": status,
         })
 
-    results.sort(key=lambda x: abs(x["difference"]))
+    results.sort(key=lambda x: x["probability"], reverse=True)
     
     return results
