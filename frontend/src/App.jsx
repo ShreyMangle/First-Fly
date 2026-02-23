@@ -8,6 +8,9 @@ import Contact from "./pages/Contact";
 import AppPage from "./pages/AppPage";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -20,9 +23,20 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/app" element={<AppPage />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="*" element={<h2>Page Not Found</h2>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/app"
+            element={
+              <ProtectedRoute>
+                <AppPage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="*" element={<h2>Page Not Found</h2>} />
         </Routes>
       </div>
