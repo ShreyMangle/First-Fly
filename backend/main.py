@@ -5,6 +5,7 @@ from backend.app.api.cutoff import router as cutoff_router
 from backend.app.api.recommendations import router as recommendations_router
 from backend.app.api.branches import router as branches_router
 from backend.app.api.auth import router as auth_router
+from backend.app.models.user import User
 
 from fastapi.middleware.cors import CORSMiddleware 
     

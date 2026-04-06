@@ -6,6 +6,9 @@ from backend.app.services.recommendation_service import get_recommendations
 
 from backend.app.models.cutoff import Cutoff
 
+from backend.app.api.auth import get_current_user
+from backend.app.api.auth import require_role
+
 router = APIRouter(prefix="/recommendations", tags=["Recommendations"])
 
 
@@ -18,6 +21,7 @@ def recommend(
     top_n: int = 10,
     min_status: str | None = None,
     db: Session = Depends(get_db),
+    user=Depends(get_current_user) 
 ):
     results = get_recommendations(
         db=db,
@@ -31,7 +35,10 @@ def recommend(
     return results[:top_n]
 
 @router.get("/debug-values")
-def debug_values(db: Session = Depends(get_db)):
+def debug_values(
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+    ):
     rows = db.query(Cutoff).limit(20).all()
     return [
         {
@@ -41,3 +48,7 @@ def debug_values(db: Session = Depends(get_db)):
         }
         for r in rows
     ]
+    
+@router.get("/admin-test")
+def admin_test(user=Depends(require_role("admin"))):
+    return {"message": "Admin access granted"}
